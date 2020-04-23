@@ -7,17 +7,24 @@ import sun.security.timestamp.TSRequest;
 
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 public class NewOrderMain {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
 
         String TOPIC_NAME = "ECOMMERCE_NEW_ORDER";
 
         KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties());
         String value = "123,6852,755412";
         ProducerRecord<String, String> producerRecord = new ProducerRecord<>(TOPIC_NAME, value, value);
-        producer.send(producerRecord);
+        producer.send(producerRecord, (data, ex) -> {
+            if (ex != null) {
+                ex.printStackTrace();
+                return;
+            }
+            System.out.println("sucesso enviando " + data.topic() + ":::partition " + data.partition() + "/ offset " + data.offset() + "/ timestamp " + data.timestamp());
+        } ).get();
     }
 
     private static Properties properties() {
