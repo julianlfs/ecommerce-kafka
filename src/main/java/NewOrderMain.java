@@ -16,7 +16,7 @@ public class NewOrderMain {
         String TOPIC_NAME = "ECOMMERCE_NEW_ORDER";
 
         KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties());
-        String value = "123,6852,755412";
+        String value = "123,6852741,755412";
         ProducerRecord<String, String> producerRecord = new ProducerRecord<>(TOPIC_NAME, value, value);
         producer.send(producerRecord, (data, ex) -> {
             if (ex != null) {
@@ -28,6 +28,7 @@ public class NewOrderMain {
     }
 
     private static Properties properties() {
+
         Properties properties = new Properties();
         properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
