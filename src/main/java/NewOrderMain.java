@@ -16,7 +16,7 @@ public class NewOrderMain {
         String TOPIC_NAME = "ECOMMERCE_NEW_ORDER";
 
         KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties());
-        String value = "123,6852741,755412";
+        String value = "123,6852741,1234";
         ProducerRecord<String, String> producerRecord = new ProducerRecord<>(TOPIC_NAME, value, value);
         producer.send(producerRecord, (data, ex) -> {
             if (ex != null) {
