@@ -1,3 +1,4 @@
+import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -18,13 +19,20 @@ public class NewOrderMain {
         KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties());
         String value = "123,6852741,1234";
         ProducerRecord<String, String> producerRecord = new ProducerRecord<>(TOPIC_NAME, value, value);
-        producer.send(producerRecord, (data, ex) -> {
+       Callback callback = (data, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
             }
             System.out.println("sucesso enviando " + data.topic() + ":::partition " + data.partition() + "/ offset " + data.offset() + "/ timestamp " + data.timestamp());
-        } ).get();
+        };
+
+        producer.send(producerRecord, callback).get();
+
+        String email = "Thank you for your order!";
+        ProducerRecord<String, String> emailRecord = new ProducerRecord<>("ECOMMERCE_SEND_EMAIL", email, email);
+
+        producer.send(emailRecord, callback).get();
     }
 
     private static Properties properties() {
