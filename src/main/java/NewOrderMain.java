@@ -8,6 +8,7 @@ import sun.security.timestamp.TSRequest;
 
 import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 public class NewOrderMain {
@@ -17,8 +18,9 @@ public class NewOrderMain {
         String TOPIC_NAME = "ECOMMERCE_NEW_ORDER";
 
         KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties());
-        String value = "123,6852741,1234";
-        ProducerRecord<String, String> producerRecord = new ProducerRecord<>(TOPIC_NAME, value, value);
+        String key = UUID.randomUUID().toString();
+        String value = key + ",6852741,1234";
+        ProducerRecord<String, String> producerRecord = new ProducerRecord<>(TOPIC_NAME, key, value);
        Callback callback = (data, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
@@ -30,7 +32,7 @@ public class NewOrderMain {
         producer.send(producerRecord, callback).get();
 
         String email = "Thank you for your order!";
-        ProducerRecord<String, String> emailRecord = new ProducerRecord<>("ECOMMERCE_SEND_EMAIL", email, email);
+        ProducerRecord<String, String> emailRecord = new ProducerRecord<>("ECOMMERCE_SEND_EMAIL", key, email);
 
         producer.send(emailRecord, callback).get();
     }
