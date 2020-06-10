@@ -7,6 +7,7 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.time.Duration;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Properties;
 
 public class EmailService {
@@ -15,7 +16,10 @@ public class EmailService {
 
         EmailService emailService = new EmailService();
         try(KafkaService kafkaService = new KafkaService(EmailService.class.getSimpleName()
-                , "ECOMMERCE_SEND_EMAIL", emailService::parse, String.class)) {
+                , "ECOMMERCE_SEND_EMAIL"
+                , emailService::parse
+                , String.class
+                , new HashMap<String, String>())) {
             kafkaService.run();
         }
     }
