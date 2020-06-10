@@ -14,8 +14,9 @@ public class EmailService {
     public static void main(String[] args) {
 
         EmailService emailService = new EmailService();
-        KafkaService kafkaService = new KafkaService(EmailService.class.getSimpleName(), "ECOMMERCE_SEND_EMAIL", emailService::parse);
-        kafkaService.run();
+        try(KafkaService kafkaService = new KafkaService(EmailService.class.getSimpleName(), "ECOMMERCE_SEND_EMAIL", emailService::parse)) {
+            kafkaService.run();
+        }
     }
 
       private void parse(ConsumerRecord<String, String> record) {
