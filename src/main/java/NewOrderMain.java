@@ -17,7 +17,7 @@ public class NewOrderMain {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 
         try (KafkaDispatcher orderDispatcher = new KafkaDispatcher<Order>()) {
-            try (KafkaDispatcher emailDispatcher = new KafkaDispatcher<String>()) {
+            try (KafkaDispatcher emailDispatcher = new KafkaDispatcher<Email>()) {
                 for (int i = 0; i < 10; i++) {
                     String userId = UUID.randomUUID().toString();
                     String orderId = UUID.randomUUID().toString();
