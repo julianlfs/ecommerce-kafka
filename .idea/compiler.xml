@@ -13,8 +13,5 @@
         <module name="service-new-order" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="service-fraud-detector" target="8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
